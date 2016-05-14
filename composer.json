@@ -1,0 +1,6 @@
+{
+    "require": {
+        "illuminate/database": "^5.2",
+        "pear/system_daemon": "@dev"
+    }
+}

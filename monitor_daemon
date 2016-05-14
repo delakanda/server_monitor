@@ -1,0 +1,68 @@
+#!/usr/bin/php -q
+
+<?php
+
+require_once "vendor/autoload.php";
+
+// Allowed arguments & their defaults
+$runmode = array(
+    'no-daemon' => false,
+    'help' => false,
+    'write-initd' => false,
+);
+
+// Scan command line attributes for allowed arguments
+foreach ($argv as $k=>$arg) {
+    if (substr($arg, 0, 2) == '--' && isset($runmode[substr($arg, 2)])) {
+        $runmode[substr($arg, 2)] = true;
+        var_dump(substr($arg, 2));
+    }
+}
+
+$options = array(
+    'appName' => 'sys_mon_daemon',
+    //'appDir' => dirname(__FILE__),
+    'appDescription' => 'Monitor Server System Resources',
+    'authorName' => 'Delali Kanda',
+    'authorEmail' => 'delakanda@gmail.com',
+    //'sysMaxExecutionTime' => '0',
+    //'sysMaxInputTime' => '0',
+    //'sysMemoryLimit' => '1024M',
+    'appRunAsGID' => 1000,
+    'appRunAsUID' => 1000,
+);
+
+\System_Daemon::setOptions($options);
+
+if (!$runmode['no-daemon']) {
+    // Spawn Daemon
+    System_Daemon::start();
+}
+
+$runningOkay = true;
+
+$runCounts = 1;
+
+while (!\System_Daemon::isDying() && $runningOkay && $runCounts <=3) {
+
+    $mode = '"'.(System_Daemon::isInBackground() ? '' : 'non-' ).'daemon" mode';
+
+    System_Daemon::info('{appName} running in %s %s/3',
+        $mode,
+        $runCounts
+    );
+
+    $runningOkay = true;
+
+    if (!$runningOkay) {
+        System_Daemon::err('parseLog() produced an error, '.
+            'so this will be my last run');
+    }
+
+    System_Daemon::iterate(2);
+
+    $runCounts++;
+
+}
+
+System_Daemon::stop();
