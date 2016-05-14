@@ -5,6 +5,7 @@
 require_once "vendor/autoload.php";
 
 use App\Monitors\DiskMonitor;
+use App\Repositories\DiskRepo;
 
 // Allowed arguments & their defaults
 $runmode = array(
@@ -62,8 +63,15 @@ while (!\System_Daemon::isDying() && $runningOkay && $runCounts <=5) {
     $diskDetails = DiskMonitor::getDiskDetails();
 
     \System_Daemon::info('Disk Space - Total : %s , Used : %s , Free : %s',
-        $diskDetails['total'],$diskDetails['used'],$diskDetails['free']
+        $diskDetails['total']['disp'],$diskDetails['used']['disp'],$diskDetails['free']['disp']
     );
+
+    $diskRepo = new DiskRepo;
+    $diskRepo->insertData($diskDetails);
+
+    //unset variable
+    unset($diskRepo);
+
 
     \System_Daemon::iterate(2);
 

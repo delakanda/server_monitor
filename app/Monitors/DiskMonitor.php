@@ -10,7 +10,7 @@ class DiskMonitor extends Monitor
 {
     public static function getDiskDetails()
     {
-        $disks = Config::getDefaults()['disk_directories'];
+        $disks = Config::get('disks');
         $retArr = [];
 
         foreach($disks as $disk) {

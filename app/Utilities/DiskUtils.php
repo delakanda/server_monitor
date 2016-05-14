@@ -13,17 +13,23 @@ class DiskUtils
 
     public function totalDiskSpace()
     {
-        return $this->getUnits(disk_total_space($this->directory));
+        $diskSpace = disk_total_space($this->directory);
+
+        return [ 'disp' => $this->getUnits($diskSpace), 'raw' => $diskSpace ];
     }
 
     public function freeDiskSpace()
     {
-        return $this->getUnits(disk_free_space($this->directory));
+        $diskSpace = disk_free_space($this->directory);
+
+        return [ 'disp' => $this->getUnits($diskSpace), 'raw' => $diskSpace ];
     }
 
     public function usedDiskSpace()
     {
-        return $this->getUnits( disk_total_space($this->directory) - disk_free_space($this->directory) );
+        $diskSpace = disk_total_space($this->directory) - disk_free_space($this->directory);
+
+        return [  'disp' => $this->getUnits($diskSpace), 'raw' => $diskSpace  ];
     }
 
     protected function getUnits($bytes) {

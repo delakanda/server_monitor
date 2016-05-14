@@ -4,10 +4,8 @@ namespace App\Utilities;
 
 class Config
 {
-    public static function getDefaults()
+    public static function get($file)
     {
-        $config = require __DIR__ . '/../../config/disks.conf.php';
-
-        return $config;
+        return require __DIR__ . '/../../config/'.$file.'.conf.php';
     }
 }
