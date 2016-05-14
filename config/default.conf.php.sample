@@ -1,0 +1,7 @@
+<?php
+
+return [
+
+    'disk_directories'  =>  ['/','/home/dkanda'],
+
+];

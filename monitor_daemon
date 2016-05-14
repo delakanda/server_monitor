@@ -4,6 +4,8 @@
 
 require_once "vendor/autoload.php";
 
+use App\Monitors\DiskMonitor;
+
 // Allowed arguments & their defaults
 $runmode = array(
     'no-daemon' => false,
@@ -15,7 +17,6 @@ $runmode = array(
 foreach ($argv as $k=>$arg) {
     if (substr($arg, 0, 2) == '--' && isset($runmode[substr($arg, 2)])) {
         $runmode[substr($arg, 2)] = true;
-        var_dump(substr($arg, 2));
     }
 }
 
@@ -36,18 +37,18 @@ $options = array(
 
 if (!$runmode['no-daemon']) {
     // Spawn Daemon
-    System_Daemon::start();
+    \System_Daemon::start();
 }
 
 $runningOkay = true;
 
 $runCounts = 1;
 
-while (!\System_Daemon::isDying() && $runningOkay && $runCounts <=3) {
+while (!\System_Daemon::isDying() && $runningOkay && $runCounts <=5) {
 
-    $mode = '"'.(System_Daemon::isInBackground() ? '' : 'non-' ).'daemon" mode';
+    $mode = '"'.(\System_Daemon::isInBackground() ? '' : 'non-' ).'daemon" mode';
 
-    System_Daemon::info('{appName} running in %s %s/3',
+    System_Daemon::info('{appName} running in %s %s/5',
         $mode,
         $runCounts
     );
@@ -55,14 +56,15 @@ while (!\System_Daemon::isDying() && $runningOkay && $runCounts <=3) {
     $runningOkay = true;
 
     if (!$runningOkay) {
-        System_Daemon::err('parseLog() produced an error, '.
-            'so this will be my last run');
+        \System_Daemon::err('parseLog() produced an error, '.'so this will be my last run');
     }
 
-    System_Daemon::iterate(2);
+    \System_Daemon::iterate(2);
 
     $runCounts++;
 
+    $diskDetails = DiskMonitor::getDiskDetails();
+
 }
 
-System_Daemon::stop();
+\System_Daemon::stop();
