@@ -2,6 +2,6 @@
 
 return [
 
-    'disk_directories'  =>  ['/','/home/dkanda'],
+    'disk_directories'  =>  ['/',..,..],
 
 ];
