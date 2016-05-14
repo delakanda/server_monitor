@@ -1,7 +1,8 @@
 {
     "require": {
         "illuminate/database": "^5.2",
-        "pear/system_daemon": "@dev"
+        "pear/system_daemon": "@dev",
+        "ekowabaka/yentu": "@dev"
     },
     "autoload": {
         "psr-4": {

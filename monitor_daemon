@@ -48,22 +48,26 @@ while (!\System_Daemon::isDying() && $runningOkay && $runCounts <=5) {
 
     $mode = '"'.(\System_Daemon::isInBackground() ? '' : 'non-' ).'daemon" mode';
 
-    System_Daemon::info('{appName} running in %s %s/5',
-        $mode,
-        $runCounts
-    );
+    // System_Daemon::info('{appName} running in %s %s/5',
+    //     $mode,
+    //     $runCounts
+    // );
 
     $runningOkay = true;
 
     if (!$runningOkay) {
-        \System_Daemon::err('parseLog() produced an error, '.'so this will be my last run');
+        \System_Daemon::err('An error occurred, exiting...');
     }
+
+    $diskDetails = DiskMonitor::getDiskDetails();
+
+    \System_Daemon::info('Disk Space - Total : %s , Used : %s , Free : %s',
+        $diskDetails['total'],$diskDetails['used'],$diskDetails['free']
+    );
 
     \System_Daemon::iterate(2);
 
     $runCounts++;
-
-    $diskDetails = DiskMonitor::getDiskDetails();
 
 }
 

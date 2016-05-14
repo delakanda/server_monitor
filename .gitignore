@@ -1,2 +1,4 @@
 vendor/
-config/default.conf.php
+config/disks.conf.php
+config/db.conf.php
+yentu/config/default.conf.php
