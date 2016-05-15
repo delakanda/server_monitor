@@ -62,9 +62,11 @@ while (!\System_Daemon::isDying() && $runningOkay && $runCounts <=5) {
 
     $diskDetails = DiskMonitor::getDiskDetails();
 
-    \System_Daemon::info('Disk Space - Total : %s , Used : %s , Free : %s',
-        $diskDetails['total']['disp'],$diskDetails['used']['disp'],$diskDetails['free']['disp']
-    );
+    foreach($diskDetails as $disk) {
+        \System_Daemon::info('Disk Space (%s) - Total : %s , Used : %s , Free : %s',
+            $disk['path'],$disk['total']['disp'],$disk['used']['disp'],$disk['free']['disp']
+        );
+    }
 
     $diskRepo = new DiskRepo;
     $diskRepo->insertData($diskDetails);

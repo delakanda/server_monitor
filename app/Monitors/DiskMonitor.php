@@ -13,21 +13,22 @@ class DiskMonitor extends Monitor
         $disks = Config::get('disks');
         $retArr = [];
 
-        foreach($disks as $disk) {
+        foreach($disks as $key => $disk) {
             if(is_dir($disk)) {
 
                 $diskUtil = new DiskUtils($disk);
 
-                $retArr['free'] = $diskUtil->freeDiskSpace();
-                $retArr['total'] = $diskUtil->totalDiskSpace();
-                $retArr['used'] = $diskUtil->usedDiskSpace();
-
-                return $retArr;
+                $retArr[$key]['path'] = $disk;
+                $retArr[$key]['free'] = $diskUtil->freeDiskSpace();
+                $retArr[$key]['total'] = $diskUtil->totalDiskSpace();
+                $retArr[$key]['used'] = $diskUtil->usedDiskSpace();
 
             } else {
                 print_r($disk. ' - not a directory');
                 return null;
             }
         }
+
+        return $retArr;
     }
 }

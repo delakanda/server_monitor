@@ -28,4 +28,10 @@ class DBRepo
             $this->capsule->table($this->serverTable)->insert($data);
         }
     }
+
+    protected function getServerId()
+    {
+        $result = $this->capsule->table($this->serverTable)->where('server_host_ip',$this->server)->first();
+        return $result->server_id;
+    }
 }
