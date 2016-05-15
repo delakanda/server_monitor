@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Utilities\Config;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use System_Daemon;
 
 class DBRepo
 {
@@ -20,12 +21,17 @@ class DBRepo
         $this->capsule->setAsGlobal();
         $this->capsule->bootEloquent();
 
-        $this->server = Config::get('server')['server_host_ip'];
+        $this->server = Config::get('server');
         $result = $this->capsule->table($this->serverTable)->where('server_host_ip',$this->server)->get();
 
         if(empty($result)) {
+
+            System_Daemon::info('Inserting new record for server : %s',$this->server);
+
             $data = [ ['server_host_ip' => $this->server] ];
             $this->capsule->table($this->serverTable)->insert($data);
+
+            System_Daemon::info('Insertion successful');
         }
     }
 

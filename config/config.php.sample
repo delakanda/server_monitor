@@ -1,0 +1,22 @@
+<?php
+
+return [
+
+    'server'=>  'xx.xx.xx.xx',
+
+    'disks'=>  [
+        '/path'
+    ],
+
+    'db'=>  [
+        'driver'        => '',
+        'host'          => '',
+        'database'      => '',
+        'username'      => '',
+        'password'      => '',
+        'charset'       => 'utf8',
+        'collation'     => 'utf8_unicode_ci',
+        'prefix'        => '',
+    ]
+
+];

@@ -4,8 +4,9 @@ namespace App\Utilities;
 
 class Config
 {
-    public static function get($file)
+    public static function get($index)
     {
-        return require __DIR__ . '/../../config/'.$file.'.conf.php';
+        $config = require __DIR__ . '/../../config/config.php';
+        return $config[$index];
     }
 }
