@@ -54,7 +54,7 @@ if (!$runmode['no-db']) {
 
     if(!$result) {
         //disable loop
-        \System_Daemon::info('DB Connection failed..');
+        \System_Daemon::err('DB Connection failed..');
         $runningOkay = false;
     } else {
         \System_Daemon::info('DB Connection Successful...');
