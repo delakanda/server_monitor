@@ -40,4 +40,26 @@ class DBRepo
         $result = $this->capsule->table($this->serverTable)->where('server_host_ip',$this->server)->first();
         return $result->server_id;
     }
+
+    public static function testDBConnection()
+    {
+        $retVal = false;
+
+        $dbConfig = Config::get('db');
+
+        System_Daemon::info('Testing DB Connection...');
+
+        try{
+            $dbConn = new \pdo( $dbConfig['driver'].':host='.$dbConfig['host'].';dbname='.$dbConfig['database'],
+                            $dbConfig['username'],
+                            $dbConfig['password'],
+                            array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION));
+            $retVal = true;
+        }
+        catch(\PDOException $ex){
+            $retVal = false;
+        }
+
+        return $retVal;
+    }
 }

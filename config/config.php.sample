@@ -4,6 +4,9 @@ return [
 
     'server'=>  'xx.xx.xx.xx',
 
+    //time interval for daemon to rest in seconds
+    'pause_interval'=>  2
+
     'disks'=>  [
         '/path'
     ],
@@ -17,6 +20,7 @@ return [
         'charset'       => 'utf8',
         'collation'     => 'utf8_unicode_ci',
         'prefix'        => '',
+        'port'          => ''
     ]
 
 ];

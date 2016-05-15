@@ -4,14 +4,16 @@
 
 require_once "vendor/autoload.php";
 
-use App\Monitors\DiskMonitor;
-use App\Repositories\DiskRepo;
+use App\Effectors\DiskEffector;
+use App\Utilities\Config;
+use App\Repositories\DBRepo;
 
 // Allowed arguments & their defaults
 $runmode = array(
     'no-daemon' => false,
     'help' => false,
     'write-initd' => false,
+    'no-db' =>  false
 );
 
 // Scan command line attributes for allowed arguments
@@ -22,7 +24,7 @@ foreach ($argv as $k=>$arg) {
 }
 
 $options = array(
-    'appName' => 'sys_mon_daemon',
+    'appName' => 'sys_monitor_daemon',
     //'appDir' => dirname(__FILE__),
     'appDescription' => 'Monitor Server System Resources',
     'authorName' => 'Delali Kanda',
@@ -40,19 +42,30 @@ if (!$runmode['no-daemon']) {
     // Spawn Daemon
     \System_Daemon::start();
 }
-
+//operational variables
 $runningOkay = true;
+$dbOps = true;
 
 $runCounts = 1;
+
+//test DB if no-db arg not provided to see if the connection is successful else do not run daemon
+if (!$runmode['no-db']) {
+    $result = DBRepo::testDBConnection();
+
+    if(!$result) {
+        //disable loop
+        \System_Daemon::info('DB Connection failed..');
+        $runningOkay = false;
+    } else {
+        \System_Daemon::info('DB Connection Successful...');
+    }
+} else {
+    $dbOps = false;
+}
 
 while (!\System_Daemon::isDying() && $runningOkay && $runCounts <=5) {
 
     $mode = '"'.(\System_Daemon::isInBackground() ? '' : 'non-' ).'daemon" mode';
-
-    // System_Daemon::info('{appName} running in %s %s/5',
-    //     $mode,
-    //     $runCounts
-    // );
 
     $runningOkay = true;
 
@@ -60,22 +73,9 @@ while (!\System_Daemon::isDying() && $runningOkay && $runCounts <=5) {
         \System_Daemon::err('An error occurred, exiting...');
     }
 
-    $diskDetails = DiskMonitor::getDiskDetails();
+    DiskEffector::execute($dbOps);
 
-    foreach($diskDetails as $disk) {
-        \System_Daemon::info('Disk Space (%s) - Total : %s , Used : %s , Free : %s',
-            $disk['path'],$disk['total']['disp'],$disk['used']['disp'],$disk['free']['disp']
-        );
-    }
-
-    $diskRepo = new DiskRepo;
-    $diskRepo->insertData($diskDetails);
-
-    //unset variable
-    unset($diskRepo);
-
-
-    \System_Daemon::iterate(2);
+    \System_Daemon::iterate(Config::get('pause_interval'));
 
     $runCounts++;
 
