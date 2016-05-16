@@ -3,6 +3,7 @@
 <?php
 
 require_once "vendor/autoload.php";
+require_once "lib/System/Daemon.php";
 
 use App\Effectors\DiskEffector;
 use App\Utilities\Config;
@@ -36,7 +37,7 @@ $options = array(
     'appRunAsUID' => 1000,
 );
 
-\System_Daemon::setOptions($options);
+System_Daemon::setOptions($options);
 
 if (!$runmode['no-daemon']) {
     // Spawn Daemon
