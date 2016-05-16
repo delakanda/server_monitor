@@ -24,7 +24,7 @@ foreach ($argv as $k=>$arg) {
 }
 
 $options = array(
-    'appName' => 'sys_monitor_daemon',
+    'appName' => 'monitor_daemon',
     //'appDir' => dirname(__FILE__),
     'appDescription' => 'Monitor Server System Resources',
     'authorName' => 'Delali Kanda',
@@ -46,8 +46,6 @@ if (!$runmode['no-daemon']) {
 $runningOkay = true;
 $dbOps = true;
 
-$runCounts = 1;
-
 //test DB if no-db arg not provided to see if the connection is successful else do not run daemon
 if (!$runmode['no-db']) {
     $result = DBRepo::testDBConnection();
@@ -63,7 +61,7 @@ if (!$runmode['no-db']) {
     $dbOps = false;
 }
 
-while (!\System_Daemon::isDying() && $runningOkay && $runCounts <=5) {
+while (!\System_Daemon::isDying() && $runningOkay) {
 
     $mode = '"'.(\System_Daemon::isInBackground() ? '' : 'non-' ).'daemon" mode';
 
@@ -76,9 +74,6 @@ while (!\System_Daemon::isDying() && $runningOkay && $runCounts <=5) {
     DiskEffector::execute($dbOps);
 
     \System_Daemon::iterate(Config::get('pause_interval'));
-
-    $runCounts++;
-
 }
 
 \System_Daemon::stop();
