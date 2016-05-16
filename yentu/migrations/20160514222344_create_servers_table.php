@@ -7,6 +7,7 @@ begin()
     ->table('servers')
         ->column('server_id')->type('integer')->nulls(false)
         ->column('server_host_ip')->type('string')->nulls(false)
+        ->column('server_name')->type('string')->nulls(false)
         ->primaryKey('server_id')->name('server_id_pk')->autoIncrement()
         ->unique('server_host_ip')->name('server_host_ip_uk')
 ->end();

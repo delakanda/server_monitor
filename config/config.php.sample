@@ -2,10 +2,10 @@
 
 return [
 
-    'server'=>  'xx.xx.xx.xx',
+    'server'=>  ['host_ip'=>'xx.xx.xx.xx','name'=>''],
 
     //time interval for daemon to rest in seconds
-    'pause_interval'=>  2
+    'pause_interval'=>  2,
 
     'disks'=>  [
         '/path'
@@ -19,8 +19,7 @@ return [
         'password'      => '',
         'charset'       => 'utf8',
         'collation'     => 'utf8_unicode_ci',
-        'prefix'        => '',
-        'port'          => ''
+        'prefix'        => ''
     ]
 
 ];

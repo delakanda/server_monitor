@@ -22,13 +22,14 @@ class DBRepo
         $this->capsule->bootEloquent();
 
         $this->server = Config::get('server');
-        $result = $this->capsule->table($this->serverTable)->where('server_host_ip',$this->server)->get();
+
+        $result = $this->capsule->table($this->serverTable)->where('server_host_ip',$this->server['host_ip'])->get();
 
         if(empty($result)) {
 
             System_Daemon::info('Inserting new record for server : %s',$this->server);
 
-            $data = [ ['server_host_ip' => $this->server] ];
+            $data = [ ['server_host_ip' => $this->server['host_ip'],'server_name'=>$this->server['name']] ];
             $this->capsule->table($this->serverTable)->insert($data);
 
             System_Daemon::info('Insertion successful');
@@ -37,7 +38,7 @@ class DBRepo
 
     protected function getServerId()
     {
-        $result = $this->capsule->table($this->serverTable)->where('server_host_ip',$this->server)->first();
+        $result = $this->capsule->table($this->serverTable)->where('server_host_ip',$this->server['host_ip'])->first();
         return $result->server_id;
     }
 
