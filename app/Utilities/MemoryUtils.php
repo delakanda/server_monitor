@@ -43,12 +43,12 @@ class MemoryUtils
         return $memoryInfoData;
     }
 
-    public function formatKBToGB($kilobyteData)
+    public static function formatKBToGB($kilobyteData)
     {
         return $kilobyteData / 1000000;
     }
 
-    public function formatKBToGBDisp($kilobyteData)
+    public static function formatKBToGBDisp($kilobyteData)
     {
         return number_format(($kilobyteData / 1000000),2) . " GB";
     }
