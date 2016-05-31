@@ -76,7 +76,7 @@ while (!\System_Daemon::isDying() && $runningOkay) {
         \System_Daemon::err('An error occurred, exiting...');
     }
 
-    //DiskEffector::execute($dbOps);
+    DiskEffector::execute($dbOps);
     MemoryEffector::execute($dbOps);
 
     \System_Daemon::iterate(Config::get('pause_interval'));
