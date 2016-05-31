@@ -12,7 +12,7 @@ class MemoryUtils
 
     }
 
-    public function getSystemMemoryInfo()
+    public static function getSystemMemoryInfo()
     {
         $memoryInfoData = [];
 
