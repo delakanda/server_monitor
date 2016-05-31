@@ -6,8 +6,12 @@ require_once "vendor/autoload.php";
 require_once "lib/System/Daemon.php";
 
 use App\Effectors\DiskEffector;
+use App\Effectors\MemoryEffector;
 use App\Utilities\Config;
 use App\Repositories\DBRepo;
+
+//Display only errors
+error_reporting(E_ERROR);
 
 // Allowed arguments & their defaults
 $runmode = array(
@@ -72,7 +76,8 @@ while (!\System_Daemon::isDying() && $runningOkay) {
         \System_Daemon::err('An error occurred, exiting...');
     }
 
-    DiskEffector::execute($dbOps);
+    //DiskEffector::execute($dbOps);
+    MemoryEffector::execute($dbOps);
 
     \System_Daemon::iterate(Config::get('pause_interval'));
 }
